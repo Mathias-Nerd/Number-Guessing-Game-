@@ -11,9 +11,9 @@ def generate_secret_number(low=1, high=100):
 def compare_guess(guess, secret_number):
     """Compare a player's guess with the secret number and return the result."""
     if guess < secret_number:
-        return "Too low"
+        return "Too low! Try a higher number."
     elif guess > secret_number:
-        return "Too high"
+        return "Too high! Try a lower number."
     else:
         return "Correct"
         
@@ -76,7 +76,7 @@ def give_hint(secret_number, low, high):
 
 def calculate_score(max_attempts, attempts):
     """Calculate and return a score based on the number of attempts used."""
-    return (max_attempts - attempts + 1) * 100
+    return 100 * (max_attempts - attempts + 1) / max_attempts
 
 
 def get_rating(attempts):
@@ -107,7 +107,7 @@ def choose_game_mode():
         
         
         
-            
+
               
 #level1() 
 #→ generate secret number
@@ -187,14 +187,19 @@ def level3():
         print(f"Attempt: {attempts}")
 
         result = compare_guess(guess, secret_number)
-        print(result)
+        if attempts != max_attempts:
+            print(result)
+            if guess != secret_number:
+                print(f"You have {max_attempts-attempts} attempt left")
+        else:
+            print("Game Over!")
+
 
         if result == "Correct":
             print(f"Congratulations! You got it in {attempts} attempts.")
             break
 
 
-    print("Game Over!")
     print(f"The secret number was {secret_number}.")
     
     
@@ -344,17 +349,7 @@ def level4():
         if play_again == "n":
             break
 
-def main():
-    level = 4
-    if level == 1:
-        level1()
-    elif level == 2:
-        level2()
-    elif level == 3:
-        level3()
-    else:
-        level4()
-        
-    #level4()
-        
-main()
+
+if __name__ == "__main__":        
+    level4()
+    
