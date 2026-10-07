@@ -1,6 +1,7 @@
 # Number Guessing Game — Expanded Challenge
 Python Project Documentation
-## Project GoalBuild a competitive command-line game where the player tries to guess a randomly generated number within a set range, receiving "too high" or "too low" hints after each attempt.
+## Project Goal
+Build a competitive command-line game where the player tries to guess a randomly generated number within a set range, receiving "too high" or "too low" hints after each attempt.
 ## Requirements
 1. The computer picks a random number within a configurable range (e.g., 1–100).
 2. The player enters guesses and receives directional hints after each attempt.
