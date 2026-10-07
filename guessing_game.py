@@ -251,9 +251,9 @@ def level4():
                 if wrong_guesses % 3 == 0:
                     print(give_hint(secret_number, low, high))
 
-            else:
-                print("Game Over!")
-                print(f"The secret number was {secret_number}.")
+            
+            print("Game Over!")
+            print(f"The secret number was {secret_number}.")
 
         elif mode == "2":
             secret_number = generate_secret_number(low, high)
@@ -324,11 +324,11 @@ def level4():
                 # One complete attempt consists of both players guessing.
                 attempts += 1
 
-            else:
-                print("\nGame Over!")
-                print(f"The secret number was {secret_number}.")
-                print(f"Player 1 attempts: {player1_attempts}")
-                print(f"Player 2 attempts: {player2_attempts}")
+            
+            print("\nGame Over!")
+            print(f"The secret number was {secret_number}.")
+            print(f"Player 1 attempts: {player1_attempts}")
+            print(f"Player 2 attempts: {player2_attempts}")
 
         print(f"\nBest score: {best_score}")
 
