@@ -3,9 +3,6 @@ import json
 import os
 import getpass
 
-# The maximum number of players allowed in multiplayer mode
-MAX_PLAYERS = 5
-
 
 def generate_secret_number(low=1, high=100):
     """
@@ -63,7 +60,7 @@ def get_valid_guess(low, high, mode):
     is visible.
 
     In multiplayer mode, getpass.getpass() is used so
-    the guess is hidden from the other players.
+    the guess is hidden from the other player.
     """
     while True:
 
@@ -138,7 +135,6 @@ def choose_game_mode():
         print("Invalid game mode. Please choose 1 or 2.")
 
 
-
 def give_hint(secret_number, low, high, wrong_guess):
     """Generate and return a hint about the secret number."""
     if wrong_guess == 3:
@@ -191,10 +187,6 @@ def display_leaderboard(leaderboard):
 def game():
     """
     Runs the full challenge version of the number guessing game.
-
-    Single player and multiplayer share ONE game loop.
-    Single player is simply a game with 1 player, so the
-    same code handles 1 to 5 players without duplication.
     """
 
     # -----------------------------
@@ -232,23 +224,13 @@ def game():
     # CHOOSE GAME MODE
     # -----------------------------
 
-    # choose_game_mode() still returns "1" or "2".
-    # "mode" is also passed to get_valid_guess() so it knows
-    # whether to hide the guess (multiplayer) or show it.
     mode = choose_game_mode()
 
-    # -----------------------------
-    # DECIDE NUMBER OF PLAYERS
-    # -----------------------------
-
-    # Single player  -> exactly 1 player.
-    # Multiplayer    -> ask how many players (2 to 5).
     if mode == "1":
         number_of_players = 1
 
     else:
         number_of_players = 2
-        # number_of_players = get_number_of_players()
 
     # -----------------------------
     # GET PLAYER NAMES
@@ -256,7 +238,6 @@ def game():
 
     player_names = []
 
-    # Loop once per player (runs only once in single player)
     for player_number in range(
         1,
         number_of_players + 1
@@ -268,18 +249,11 @@ def game():
                 f"Enter Player {player_number} name: "
             ).strip()
 
-            # Name must not be empty
-            if not name:
-                print("Name cannot be empty.")
-
-            # Names must be unique, otherwise two players
-            # would share one leaderboard entry
-            elif name in player_names:
-                print("That name is already taken. Choose another.")
-
-            else:
+            if name:
                 player_names.append(name)
                 break
+
+            print("Name cannot be empty.")
 
     # -----------------------------
     # PLAY MULTIPLE ROUNDS
@@ -308,17 +282,9 @@ def game():
 
         low, high, max_attempt = choose_difficulty()
 
-        # Single player sees "You have ...", multiplayer
-        # sees "Each player has ..."
-        if number_of_players == 1:
-            print(
-                f"\nYou have {max_attempt} attempts."
-            )
-
-        else:
-            print(
-                f"\nEach player has {max_attempt} attempts."
-            )
+        print(
+            f"\nYou have {max_attempt} attempts."
+        )
 
         print(
             f"The number is between {low} and {high}."
@@ -333,99 +299,70 @@ def game():
             high
         )
 
-        # Each player has their own attempt counter.
-        # Example with 3 players: [0, 0, 0]
+        # Each player has their own
+        # attempt counter
         attempts = [0] * number_of_players
 
-        # Counts how many FULL rounds of wrong guesses have
-        # happened (a full round = every player guessed once
-        # and all of them were wrong). Used to trigger hints.
+        # Count wrong-guess pairs
         wrong_guesses = 0
 
-        # Counts wrong guesses inside the CURRENT full round.
-        # When it reaches number_of_players, one full round of
-        # wrong guesses is complete, then it resets to 0.
-        # (In single player, every wrong guess is a full round.)
-        round_wrong_guesses = 0
-
-        # Stores the index of the winning player
+        # Stores the winning player
         winner = None
 
         # Player 0 starts
         current_player = 0
 
         # -----------------------------
-        # MAIN GAME LOOP (1 TO 5 PLAYERS)
+        # SINGLE PLAYER
         # -----------------------------
 
-        # The loop stops when someone wins, or when the current
-        # player has used all attempts. Everyone takes turns in
-        # the same order, so when the player at the start of the
-        # order is out of attempts, every player is out.
-        while (
-            winner is None
-            and attempts[current_player] < max_attempt
-        ):
+        if number_of_players == 1:
 
-            # Only show whose turn it is when more than one
-            # player is playing
-            if number_of_players > 1:
-                print(
-                    f"\n{player_names[current_player]}'s turn"
+            while attempts[0] < max_attempt:
+
+                guess = get_valid_guess(
+                    low,
+                    high,
+                    mode
                 )
 
-            guess = get_valid_guess(
-                low,
-                high,
-                mode
-            )
+                attempts[0] += 1
 
-            attempts[current_player] += 1
-
-            result = compare_guess(
-                guess,
-                secret_number
-            )
-
-            print(result)
-
-            print(
-                f"Attempt: "
-                f"{attempts[current_player]}/{max_attempt}"
-            )
-
-            # -------------------------
-            # PLAYER WINS
-            # -------------------------
-
-            if result == "Correct":
-
-                winner = current_player
-
-                print(
-                    f"\nCongratulations "
-                    f"{player_names[winner]}! "
-                    f"The secret number is {secret_number}."
+                result = compare_guess(
+                    guess,
+                    secret_number
                 )
 
-                break
+                print(result)
 
-            # -------------------------
-            # PLAYER GUESSED WRONG
-            # -------------------------
+                print(
+                    f"Attempt: "
+                    f"{attempts[0]}/{max_attempt}\n"
+                )
 
-            round_wrong_guesses += 1
+                # -------------------------
+                # PLAYER WINS
+                # -------------------------
 
-            # Once every player has guessed wrong, one full
-            # round of wrong guesses is complete.
-            if round_wrong_guesses == number_of_players:
+                if result == "Correct":
+
+                    winner = 0
+
+                    print(
+                        f"\nCongratulations "
+                        f"{player_names[0]}!"
+                    )
+
+                    break
+
+                # -------------------------
+                # WRONG GUESS
+                # -------------------------
 
                 wrong_guesses += 1
 
-                round_wrong_guesses = 0
-
-                # Give a hint after every 3 full rounds
-                # of wrong guesses
+                # Give hint after every
+                # 3 wrong guesses
                 if wrong_guesses % 3 == 0:
 
                     print(
@@ -438,25 +375,112 @@ def game():
                         )
                     )
 
-            # Show remaining attempts for the player who
-            # just guessed (single player only, to keep
-            # multiplayer output short)
-            if (
-                number_of_players == 1
-                and attempts[current_player] < max_attempt
-            ):
+                # Attempts remaining
+                if attempts[0] < max_attempt:
+
+                    print(
+                        f"Attempts remaining: "
+                        f"{max_attempt - attempts[0]}"
+                    )
+
+        # -----------------------------
+        # MULTIPLAYER
+        # -----------------------------
+
+        else:
+
+            # Counts wrong guesses within
+            # the current pair.
+            pair_wrong_guesses = 0
+
+            while winner is None:
+
+                # Both players have used
+                # all their attempts
+                if (
+                    attempts[0] >= max_attempt
+                    and attempts[1] >= max_attempt
+                ):
+                    break
+
+                # If current player has used
+                # all attempts, move to other player
+                if attempts[current_player] >= max_attempt:
+
+                    current_player = 1 - current_player
+                    continue
 
                 print(
-                    f"Attempts remaining: "
-                    f"{max_attempt - attempts[current_player]}\n"
+                    f"\n{player_names[current_player]}'s turn"
                 )
 
-            # Move to the next player. The % operator wraps
-            # back to player 0 after the last player.
-            # With 1 player this always stays on player 0.
-            current_player = (
-                current_player + 1
-            ) % number_of_players
+                guess = get_valid_guess(
+                    low,
+                    high,
+                    mode
+                )
+
+                attempts[current_player] += 1
+
+                result = compare_guess(
+                    guess,
+                    secret_number
+                )
+
+                print(result)
+
+                print(
+                    f"Attempt: "
+                    f"{attempts[current_player]}/{max_attempt}"
+                )
+
+                # -------------------------
+                # PLAYER WINS
+                # -------------------------
+
+                if result == "Correct":
+
+                    winner = current_player
+
+                    print(
+                        f"\nCongratulations "
+                        f"{player_names[winner]}! The secret number is {secret_number}."
+                        
+                    )
+
+                    break
+
+                # -------------------------
+                # PLAYER GUESSED WRONG
+                # -------------------------
+
+                pair_wrong_guesses += 1
+
+                # Increase wrong_guesses
+                # only after both players
+                # have guessed wrong.
+                if pair_wrong_guesses == 2:
+
+                    wrong_guesses += 1
+
+                    pair_wrong_guesses = 0
+
+                    # Give hint after every
+                    # 3 pairs of wrong guesses
+                    if wrong_guesses % 3 == 0:
+
+                        print(
+                            "\n" +
+                            give_hint(
+                                secret_number,
+                                low,
+                                high,
+                                wrong_guesses
+                            )
+                        )
+
+                # Move to the other player
+                current_player = 1 - current_player
 
         # -----------------------------
         # ROUND RESULTS
