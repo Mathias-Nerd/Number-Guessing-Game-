@@ -82,9 +82,6 @@ def calculate_score(attempts, max_attempt):
     """ Calculates a player's score. Fewer attempts result in a higher score."""
     score = ((max_attempt - attempts + 1) / max_attempt) * 100
 
-    if score < 0:
-        score = 0
-
     return round(score)
 
 
@@ -136,7 +133,7 @@ def give_hint(secret_number, low, high, wrong_guess):
             return f"Hint: The number is between {low} and {midpoint}."
 
         else:
-            return (f"Hint: The number is between{midpoint + 1} and {high}.")
+            return (f"Hint: The number is between {midpoint + 1} and {high}.")
 
 
 def display_leaderboard(leaderboard):
@@ -163,7 +160,7 @@ def game():
 
     Single player and multiplayer share ONE game loop.
     Single player is simply a game with 1 player, so the
-    same code handles 1 to 5 players without duplication.
+    same code handles multiple players without duplication.
     """
 
     # -----------------------------
@@ -222,7 +219,7 @@ def game():
 
         while True:
 
-            name = input(f"Enter Player {player_number} name: ").strip()
+            name = input(f"Enter Player {player_number} name: ").strip().title()
 
             # Name must not be empty
             if not name:
@@ -388,7 +385,7 @@ def game():
 
             print(f"Score: {score} points")
 
-            print(f"Rating:{rating}")
+            print(f"Rating: {rating}")
 
             # -----------------------------
             # UPDATE LEADERBOARD
@@ -478,5 +475,5 @@ def game():
 
     print("\nThanks for playing!")
 
-
-game()
+if __name__ == "__main__":
+    game()
