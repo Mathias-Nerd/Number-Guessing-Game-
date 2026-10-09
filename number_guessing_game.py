@@ -21,14 +21,14 @@ def compare_guess(guess, secret_number):
 
 
 def choose_difficulty():
-    """ Returns the low range, high range and maximum attempts based on the selected difficulty."""
+    """ Returns the low range, high range and maximum attempts based on the selected difficulty"""
     print("\nDifficulty options")
     print("1. Easy")
     print("2. Medium")
     print("3. Hard")
 
     while True:
-        choice = input("Choose difficulty level: ")
+        choice = input("Choose difficulty level: ").strip()
 
         if choice == "1":
             return 1, 50, 5
@@ -58,11 +58,11 @@ def get_valid_guess(low, high, mode):
 
         # Single-player mode
         if mode == "1":
-            guess = input(f"Guess a number ({low}-{high}): ")
+            guess = input(f"Guess a number ({low}-{high}): ").strip().lower()
 
         # Multiplayer mode
         else:
-            guess = getpass.getpass(f"Guess a number ({low}-{high}): ")
+            guess = getpass.getpass(f"Guess a number ({low}-{high}): ").strip().lower()
 
         try:
             guess = int(guess)
@@ -105,7 +105,7 @@ def choose_game_mode():
         print("1. Single Player")
         print("2. Multiplayer")
 
-        mode = input("Enter your choice: ")
+        mode = input("Enter your choice: ").strip()
 
         if mode in ("1", "2"):
             return mode
@@ -443,9 +443,7 @@ def game():
             print("2. View leaderboard")
             print("3. Exit")
 
-            choice = input(
-                "Choose an option: "
-            )
+            choice = input("Choose an option: ").strip().lower()
 
             if choice == "1":
 
