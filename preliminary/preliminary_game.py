@@ -26,22 +26,27 @@ def compare_guess(guess, secret_number):
 
 
 def choose_difficulty():
-    """
-    returns low, high and maximum attempt
-    """
-    print("Difficulty options\n1. Easy\n2. Medium\n3. Hard")
-    while True:
-        choice = int(input("Choose difficulty level: "))
-        if choice == 1:
-            return 1, 50, 5
-        elif choice == 2:
-            return 1, 100, 7
-        elif choice == 3:
-            return 1, 500, 10
-        else:
-            print("Invalid choice. Pick from [1. Easy, 2. Medium, 3. Hard]")
-            continue
+    """ Returns the low range, high range and maximum attempts based on the selected difficulty."""
+    print("\nDifficulty options")
+    print("1. Easy")
+    print("2. Medium")
+    print("3. Hard")
 
+    while True:
+        choice = input("Choose difficulty level: ")
+
+        if choice == "1":
+            return 1, 50, 5
+
+        elif choice == "2":
+            return 1, 100, 7
+
+        elif choice == "3":
+            return 1, 500, 8
+
+        else:
+            print("Invalid choice. Pick from [1, 2, 3].")
+            
 
 def get_valid_guess(low, high):
     """

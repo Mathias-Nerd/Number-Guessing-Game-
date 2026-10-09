@@ -1,3 +1,5 @@
+MAX_PLAYER = 5
+
 def get_number_of_players():
     """
     Asks how many people will play in multiplayer mode.
