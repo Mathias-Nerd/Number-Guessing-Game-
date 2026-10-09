@@ -2,7 +2,6 @@ import random
 import json
 import os
 import getpass
-import preliminary.get_number_of_players as get_number_of_players 
 
 
 def generate_secret_number(low=1, high=100):
