@@ -3,23 +3,16 @@ import json
 import os
 import getpass
 
-# The maximum number of players allowed in multiplayer mode
-MAX_PLAYERS = 5
 
 
 def generate_secret_number(low=1, high=100):
-    """
-    Returns a random secret number.
-    """
+    """Returns a random secret number."""
     rand_num = random.randint(low, high)
     return rand_num
 
 
 def compare_guess(guess, secret_number):
-    """
-    Compares the player's guess with the secret number
-    and returns 'Too high', 'Too low', or 'Correct'.
-    """
+    """Compares the player's guess with the secret number and returns 'Too high', 'Too low', or 'Correct'."""
     if guess > secret_number:
         return "Too high! Try a lower number."
     elif guess < secret_number:
@@ -29,10 +22,7 @@ def compare_guess(guess, secret_number):
 
 
 def choose_difficulty():
-    """
-    Returns the low range, high range and maximum attempts
-    based on the selected difficulty.
-    """
+    """ Returns the low range, high range and maximum attempts based on the selected difficulty."""
     print("\nDifficulty options")
     print("1. Easy")
     print("2. Medium")
@@ -69,15 +59,11 @@ def get_valid_guess(low, high, mode):
 
         # Single-player mode
         if mode == "1":
-            guess = input(
-                f"Guess a number ({low}-{high}): "
-            )
+            guess = input(f"Guess a number ({low}-{high}): ")
 
         # Multiplayer mode
         else:
-            guess = getpass.getpass(
-                f"Guess a number ({low}-{high}): "
-            )
+            guess = getpass.getpass(f"Guess a number ({low}-{high}): ")
 
         try:
             guess = int(guess)
@@ -86,19 +72,14 @@ def get_valid_guess(low, high, mode):
                 return guess
 
             else:
-                print(
-                    f"Out of range. Enter a number between {low}-{high}."
-                )
+                print(f"Out of range. Enter a number between {low}-{high}.")
 
         except ValueError:
             print("Invalid input. Enter a whole number.")
 
 
 def calculate_score(attempts, max_attempt):
-    """
-    Calculates a player's score.
-    Fewer attempts result in a higher score.
-    """
+    """ Calculates a player's score. Fewer attempts result in a higher score."""
     score = ((max_attempt - attempts + 1) / max_attempt) * 100
 
     if score < 0:
@@ -108,9 +89,7 @@ def calculate_score(attempts, max_attempt):
 
 
 def get_rating(score):
-    """
-    Returns a star rating based on the player's score.
-    """
+    """ Returns a star rating based on the player's score."""
     if score <= 20:
         return "⭐"
     elif score <= 40:
@@ -157,10 +136,7 @@ def give_hint(secret_number, low, high, wrong_guess):
             return f"Hint: The number is between {low} and {midpoint}."
 
         else:
-            return (
-                f"Hint: The number is between "
-                f"{midpoint + 1} and {high}."
-            )
+            return (f"Hint: The number is between{midpoint + 1} and {high}.")
 
 
 def display_leaderboard(leaderboard):
@@ -173,16 +149,9 @@ def display_leaderboard(leaderboard):
         print("No scores recorded yet.")
 
     else:
-        sorted_leaderboard = sorted(
-            leaderboard.items(),
-            key=lambda item: item[1],
-            reverse=True
-        )
+        sorted_leaderboard = sorted(leaderboard.items(), key=lambda item: item[1], reverse=True )
 
-        for position, (name, score) in enumerate(
-            sorted_leaderboard,
-            start=1
-        ):
+        for position, (name, score) in enumerate(sorted_leaderboard,start=1):
             print(f"{position}. {name} - {score} points")
 
     print("=================================")
@@ -217,11 +186,7 @@ def game():
         leaderboard = {}
 
         with open(leaderboard_file, "w") as file:
-            json.dump(
-                leaderboard,
-                file,
-                indent=4
-            )
+            json.dump(leaderboard, file, indent=4)
 
     else:
 
@@ -232,9 +197,6 @@ def game():
     # CHOOSE GAME MODE
     # -----------------------------
 
-    # choose_game_mode() still returns "1" or "2".
-    # "mode" is also passed to get_valid_guess() so it knows
-    # whether to hide the guess (multiplayer) or show it.
     mode = choose_game_mode()
 
     # -----------------------------
@@ -242,13 +204,12 @@ def game():
     # -----------------------------
 
     # Single player  -> exactly 1 player.
-    # Multiplayer    -> ask how many players (2 to 5).
+    # Multiplayer    -> exactly 2 players for the scope of this project.
     if mode == "1":
         number_of_players = 1
 
     else:
         number_of_players = 2
-        # number_of_players = get_number_of_players()
 
     # -----------------------------
     # GET PLAYER NAMES
@@ -257,23 +218,17 @@ def game():
     player_names = []
 
     # Loop once per player (runs only once in single player)
-    for player_number in range(
-        1,
-        number_of_players + 1
-    ):
+    for player_number in range(1,number_of_players + 1):
 
         while True:
 
-            name = input(
-                f"Enter Player {player_number} name: "
-            ).strip()
+            name = input(f"Enter Player {player_number} name: ").strip()
 
             # Name must not be empty
             if not name:
                 print("Name cannot be empty.")
 
-            # Names must be unique, otherwise two players
-            # would share one leaderboard entry
+            # Names must be unique, otherwise two players would share one leaderboard entry
             elif name in player_names:
                 print("That name is already taken. Choose another.")
 
@@ -311,41 +266,33 @@ def game():
         # Single player sees "You have ...", multiplayer
         # sees "Each player has ..."
         if number_of_players == 1:
-            print(
-                f"\nYou have {max_attempt} attempts."
-            )
+            print(f"\nYou have {max_attempt} attempts.")
 
         else:
-            print(
-                f"\nEach player has {max_attempt} attempts."
-            )
+            print(f"\nEach player has {max_attempt} attempts.")
 
-        print(
-            f"The number is between {low} and {high}."
-        )
+        print(f"The number is between {low} and {high}.")
 
         # -----------------------------
         # GENERATE SECRET NUMBER
         # -----------------------------
 
-        secret_number = generate_secret_number(
-            low,
-            high
-        )
+        secret_number = generate_secret_number(low, high)
+
+
+
+        # -----------------------------
+        # INITIALIZE GAME STATE
+        # -----------------------------
 
         # Each player has their own attempt counter.
-        # Example with 3 players: [0, 0, 0]
+        # Example with 2 players: [0, 0]
         attempts = [0] * number_of_players
 
-        # Counts how many FULL rounds of wrong guesses have
-        # happened (a full round = every player guessed once
-        # and all of them were wrong). Used to trigger hints.
+        # Counts how many FULL rounds of wrong guesses have happened (a full round = every player guessed once and all of them were wrong). Used to trigger hints.
         wrong_guesses = 0
 
-        # Counts wrong guesses inside the CURRENT full round.
-        # When it reaches number_of_players, one full round of
-        # wrong guesses is complete, then it resets to 0.
-        # (In single player, every wrong guess is a full round.)
+        # Counts wrong guesses inside the CURRENT full round. When it reaches number_of_players, one full round of wrong guesses is complete, then it resets to 0. (In single player, every wrong guess is a full round.)
         round_wrong_guesses = 0
 
         # Stores the index of the winning player
@@ -355,44 +302,26 @@ def game():
         current_player = 0
 
         # -----------------------------
-        # MAIN GAME LOOP (1 TO 5 PLAYERS)
+        # MAIN GAME LOOP (it loops based on the number of players you have)
         # -----------------------------
 
-        # The loop stops when someone wins, or when the current
-        # player has used all attempts. Everyone takes turns in
-        # the same order, so when the player at the start of the
-        # order is out of attempts, every player is out.
-        while (
-            winner is None
-            and attempts[current_player] < max_attempt
-        ):
+        # The loop stops when someone wins, or when the current player has used all attempts. Everyone takes turns in the same order, so when the player at the start of the order is out of attempts, every player is out.
+        while (winner is None and attempts[current_player] < max_attempt ):
 
             # Only show whose turn it is when more than one
             # player is playing
             if number_of_players > 1:
-                print(
-                    f"\n{player_names[current_player]}'s turn"
-                )
+                print(f"\n{player_names[current_player]}'s turn")
 
-            guess = get_valid_guess(
-                low,
-                high,
-                mode
-            )
+            guess = get_valid_guess(low, high, mode)
 
             attempts[current_player] += 1
 
-            result = compare_guess(
-                guess,
-                secret_number
-            )
+            result = compare_guess(guess, secret_number)
 
             print(result)
 
-            print(
-                f"Attempt: "
-                f"{attempts[current_player]}/{max_attempt}"
-            )
+            print(f"Attempt: {attempts[current_player]}/{max_attempt}")
 
             # -------------------------
             # PLAYER WINS
@@ -402,11 +331,7 @@ def game():
 
                 winner = current_player
 
-                print(
-                    f"\nCongratulations "
-                    f"{player_names[winner]}! "
-                    f"The secret number is {secret_number}."
-                )
+                print(f"\nCongratulations {player_names[winner]}! The secret number is {secret_number}.")
 
                 break
 
@@ -416,109 +341,54 @@ def game():
 
             round_wrong_guesses += 1
 
-            # Once every player has guessed wrong, one full
-            # round of wrong guesses is complete.
+            # Once every player has guessed wrong, one full round of wrong guesses is complete.
             if round_wrong_guesses == number_of_players:
 
                 wrong_guesses += 1
 
                 round_wrong_guesses = 0
 
-                # Give a hint after every 3 full rounds
-                # of wrong guesses
+                # Give a hint after every 3 full rounds of wrong guesses
                 if wrong_guesses % 3 == 0:
 
-                    print(
-                        "\n" +
-                        give_hint(
-                            secret_number,
-                            low,
-                            high,
-                            wrong_guesses
-                        )
-                    )
+                    print("\n" + give_hint(secret_number,low, high, wrong_guesses))
 
-            # Show remaining attempts for the player who
-            # just guessed (single player only, to keep
-            # multiplayer output short)
-            if (
-                number_of_players == 1
-                and attempts[current_player] < max_attempt
-            ):
+            # Show remaining attempts for the player who just guessed (single player only, to keep  multiplayer output short)
+            if (number_of_players == 1 and attempts[current_player] < max_attempt):
 
-                print(
-                    f"Attempts remaining: "
-                    f"{max_attempt - attempts[current_player]}\n"
-                )
+                print(f"Attempts remaining: {max_attempt - attempts[current_player]}\n")
 
-            # Move to the next player. The % operator wraps
-            # back to player 0 after the last player.
-            # With 1 player this always stays on player 0.
-            current_player = (
-                current_player + 1
-            ) % number_of_players
+            # Move to the next player. The % operator wraps back to player 0 after the last player. With 1 player this always stays on player 0.
+            current_player = (current_player + 1) % number_of_players
 
         # -----------------------------
         # ROUND RESULTS
         # -----------------------------
 
-        print(
-            "\n========== ROUND RESULTS =========="
-        )
+        print("\n========== ROUND RESULTS ==========")
 
         if winner is not None:
 
-            print(
-                f"Winner: "
-                f"{player_names[winner]}"
-            )
+            print(f"Winner: {player_names[winner]}")
 
-        else:
-
-            print("Game Over!")
-
-            print(
-                f"The secret number was "
-                f"{secret_number}."
-            )
-
-        # -----------------------------
-        # CALCULATE WINNER'S SCORE ONLY
-        # -----------------------------
-
-        if winner is not None:
-
+            # -----------------------------
+            # CALCULATE WINNER'S SCORE ONLY
+            # -----------------------------
             winner_name = player_names[winner]
 
             winner_attempts = attempts[winner]
 
-            score = calculate_score(
-                winner_attempts,
-                max_attempt
-            )
+            score = calculate_score(winner_attempts, max_attempt)
 
-            rating = get_rating(
-                score
-            )
+            rating = get_rating(score)
 
-            print(
-                f"\n{winner_name}"
-            )
+            print(f"\n{winner_name}")
 
-            print(
-                f"Attempts: "
-                f"{winner_attempts}"
-            )
+            print(f"Attempts: {winner_attempts}")
 
-            print(
-                f"Score: "
-                f"{score} points"
-            )
+            print(f"Score: {score} points")
 
-            print(
-                f"Rating: "
-                f"{rating}"
-            )
+            print(f"Rating:{rating}")
 
             # -----------------------------
             # UPDATE LEADERBOARD
@@ -528,11 +398,7 @@ def game():
 
                 leaderboard[winner_name] = score
 
-                print(
-                    f"\n{winner_name} has been added "
-                    f"to the leaderboard with "
-                    f"{score} points."
-                )
+                print(f"\n{winner_name} has been added to the leaderboard with {score} points.")
 
             elif score > leaderboard[winner_name]:
 
@@ -540,19 +406,11 @@ def game():
 
                 leaderboard[winner_name] = score
 
-                print(
-                    f"\nNew best score "
-                    f"for {winner_name}!"
-                )
+                print(f"\nNew best score for {winner_name}!")
 
-                print(
-                    f"Previous best: "
-                    f"{old_score}"
-                )
+                print(f"Previous best: {old_score}")
 
-                print(
-                    f"New best: "
-                    f"{score}"
+                print(f"New best: {score}"
                 )
 
             # -----------------------------
@@ -561,22 +419,22 @@ def game():
 
             with open(leaderboard_file, "w") as file:
 
-                json.dump(
-                    leaderboard,
-                    file,
-                    indent=4
-                )
+                json.dump(leaderboard, file, indent=4 )
 
+        else:
         # -----------------------------
         # NO WINNER
         # -----------------------------
+            print("Game Over!")
 
-        else:
+            print(f"The secret number was {secret_number}.")
 
-            print(
-                "\nNo winner. "
-                "No score was calculated."
-            )
+            print("\nNo winner. No score was calculated.")
+
+
+        
+
+
 
         # -----------------------------
         # AFTER-ROUND MENU
@@ -599,9 +457,7 @@ def game():
 
             elif choice == "2":
 
-                display_leaderboard(
-                    leaderboard
-                )
+                display_leaderboard(leaderboard)
 
             elif choice == "3":
 
@@ -610,11 +466,7 @@ def game():
                 break
 
             else:
-
-                print(
-                    "Invalid choice. "
-                    "Pick 1, 2 or 3."
-                )
+                print("Invalid choice. Pick 1, 2 or 3.")
 
     # -----------------------------
     # FINAL LEADERBOARD
@@ -622,9 +474,7 @@ def game():
 
     print("\n")
 
-    display_leaderboard(
-        leaderboard
-    )
+    display_leaderboard(leaderboard)
 
     print("\nThanks for playing!")
 
